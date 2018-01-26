@@ -1,0 +1,276 @@
+<!doctype html>
+<html class="no-js" lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title>Climate by Location (LOCA/Livneh)</title>
+    <!-- demo dependencies, not required for the widget itself. -->
+    <link rel="stylesheet" href="vendor/skeleton.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css"
+          integrity="sha256-uHu2MAd1LvCOVEAhvMld4LpJi7dUGS7GVzvG/5B3hlo=" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"
+            integrity="sha256-ETXu4iIohKzvSucuk6Bv0DCdqiqaTTGeMsjZ72szPzM=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.css"
+          integrity="sha256-MFTTStFZmJT7CqZBPyRVaJtI2P9ovNBbwmr0/KErfEc=" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js"
+            integrity="sha256-zs4Ql/EnwyWVY+mTbGS2WIMLdfYGtQOhkeUtOawKZVY=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
+
+    <script src="vendor/webfont.js"></script>
+    <style>
+
+        /* Portrait */
+        @media screen and (orientation: portrait) {
+            .columns {
+                float: none;
+                width: 100% !important;
+                margin: 0;
+            }
+            .outlinebox { margin: 1rem 0; }
+        }
+        /* Landscape */
+        @media screen and (orientation: landscape) {
+            .content { -js-display: flex; display: flex; flex-direction: row; overflow: auto }
+            .content .outlinebox { display: flex; flex-direction: column; }
+            .content, .outlinebox { flex: 1 1 auto; overflow: hidden; }
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 500px;
+            height: 100vh;
+            background-color: #404952;
+            font-family: Lato, serif;
+        }
+        body {
+            -js-display: flex;
+            display: flex;
+            flex-direction: column;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+        .outlinebox {
+            margin: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            position: relative;
+        }
+        h1 {
+            font-weight: 500;
+            font-size: 3.25rem;
+            margin-top: 1rem;
+            text-align: center;
+            padding-bottom: 0.6em;
+            border-bottom: solid 1px lightgrey;
+            margin-left: auto;
+            margin-right: auto;
+            width: 85%;
+        }
+        .nemac-logo {
+            display: block;
+            padding: 1rem;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .nemac-logo > img { display: block; height: 5rem; margin: 1rem auto; }
+        #widget {
+            height: 250px;
+            width: 100%;
+            flex: 1 1 auto;
+            overflow: hidden;
+        }
+        .buttons-wrapper {
+            -js-display: flex;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: 0.5rem;
+        }
+        .btn {
+            display: block;
+            padding: 0.5em;
+            margin: 0.5em;
+            border: solid 2px grey;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 1em;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 1.6em;
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none; /* Firefox all */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Likely future */
+            cursor: pointer;
+        }
+        .buttons-wrapper .fa {
+            margin: 0 0.4em;
+        }
+        .buttons-wrapper input[type=checkbox] {
+            display: none;
+        }
+        .buttons-wrapper > input[type=checkbox]:checked + label[for=rcp85] {
+            border-color: #ff3835;
+            background-color: rgba(255, 67, 67, 0.38);
+        }
+        .buttons-wrapper > input[type=checkbox]:checked + label[for=rcp45] {
+            border-color: #4b93ff;
+            background-color: rgba(75, 147, 255, 0.31);
+        }
+        #download-panel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        #download-panel .download-inner {
+            margin: auto;
+            position: relative;
+            top: 70px;
+            width: 700px;
+            border: 2px solid black;
+            background-color: rgba(255, 255, 255, 1.0);
+            padding: 30px;
+        }
+        #download-panel .download-inner li {
+            margin-left: 50px;
+        }
+        #slider-range {
+            width: 85%;
+            margin: auto;
+        }
+        label { margin-top: 0.5em; }
+        .center {
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+        select:invalid { border-color: red; }
+    </style>
+    <script src="vendor/multigraph-nojq-min.js"></script>
+    <script src="src/main.js"></script>
+    <!--<script src="climate-widget-graph.js"></script>-->
+    <script src="demo.js"></script>
+
+</head>
+<body>
+<div class="content">
+    <div class="outlinebox" style="flex-basis: 30%; flex-shrink: 0; padding-bottom:6.5rem;">
+        <div>
+            <h1>Forestry Bounding Box Mapping Tool To Be Named Later <span style="font-size: 60%;">(LOCA/Livneh)</span></h1>
+        </div>
+        <form onsubmit="return false;">
+            <div class="row">
+                <div class="eight columns" style="min-width: 6rem;">
+                    <label for="bbox">Area</label>
+                    <select id="bbox" class="u-full-width">
+                        <option value="" selected ></option>
+                        <option value="-95.22090271100001,30.948893069000007,-93.07941595400001,31.873959667999998">Piney Woods Transition One</option>
+                        <option value="-95.66042261899997,30.914554555999985,-95.018716401,31.511366889999977">Piney Woods Transition Two</option>
+                        <option value="-94.25408181900002,30.26391057799998,-93.36242514999998,31.557211504999998">Sabine Alluvial Valley</option>
+                        <option value="-96.56037873100001,31.97971819899999,-93.22468025699999,34.00127428899998">Red River Alluvial Plain</option>
+                        <option value="-98.50405552400002,32.28335950100001,-97.32728361900001,33.83344323799997">Western Cross Timbers</option>
+                        <option value="-98.97047881499998,30.963897067000005,-97.12153367000002,33.85055920299999">Texas Grand Prairie</option>
+                        <option value="-98.88461361999998,29.272698117999994,-94.91056825300001,33.86796707899998">Blackland Prairie</option>
+                        <option value="-95.73067800199999,31.402474052000002,-93.92655945799999,33.64288459400001">Sand Hills</option>
+                        <option value="-95.878223176,29.714536873999975,-93.72245673999998,30.76068391199999">Southwest Flatwoods</option>
+                        <option value="-96.03224096100001,30.132117972000003,-93.57416032399999,31.258288295">Southern Loam Hills</option>
+                        <option value="-94.76811249899998,31.518043579999983,-93.33745548799999,33.05997123200001">South Central Arkansas</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <label for="variable">Variable</label>
+                <select id="variable" class="u-full-width">
+                </select>
+            </div>
+            <div class="row">
+                <label for="frequency">Frequency</label>
+                <select id="frequency" class="u-full-width">
+                    <option value="annual" selected="selected">Annual</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="seasonal">Seasonal</option>
+                </select>
+            </div>
+            <div class="row hidden" id="timeperiod-wrapper">
+                <label for="timeperiod">Time Period</label>
+                <select id="timeperiod" class="u-full-width">
+                    <option value="2025" selected="selected">30 Years Centered on 2025</option>
+                    <option value="2050">30 Years Centered on 2050</option>
+                    <option value="2075">30 Years Centered on 2075</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="outlinebox" style="flex-basis: 70%; flex-shrink:1;">
+        <div id="widget">
+            <div style="width: 100%; height: 100%; -js-display: flex; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div>
+                    <h3>Please enter an area to begin</h3>
+                    <input id="countysearch" type="search" placeholder="Autauga County, AL" style="width:30em;">
+                    <p style="margin-top: 1em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5 data for your
+                        county.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <span id="x-axis-pan-note"
+              class="center">X-axis panning and zooming only enabled for annual frequency</span>
+        <div id="slider-range"></div>
+        <div class="buttons-wrapper">
+            <span class="btn" style="background-color: #d3d3d3;"><i class="fa fa-area-chart" aria-hidden="true"></i>Modeled History</span>
+            <span class="btn" style="background-color: #ffffff;"><i class="fa fa-bar-chart" aria-hidden="true"></i>Observed History</span>
+            <input type="checkbox" name="rcp85" id="rcp85" checked>
+            <label for="rcp85" class="btn"><i class="fa fa-area-chart" aria-hidden="true"></i>RCP 8.5</label>
+            <input type="checkbox" name="rcp45" id="rcp45" checked>
+            <label for="rcp45" class="btn"><i class="fa fa-area-chart" aria-hidden="true"></i>RCP 4.5</label>
+            <div style="margin-left: auto; -js-display: flex; display: flex; flex-direction: row;">
+                <button class="btn" id="download-button" title="Download Data"><i
+                        class="fa fa-download"
+                        aria-label="Download Data"></i></button>
+                <button class="btn"><a id="download-image-link" title="Download Image"><i class=" fa fa-picture-o"
+                                                                                          aria-label="Download Image"></i></a>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="download-panel" class="hidden">
+    <div class="download-inner">
+        <p>Use the following links to download this graph's data:</p>
+        <ul>
+            <li><a href="" id="download_hist_obs_data">Observed Data</a></li>
+            <li id="download_hist_mod_data_li"><a href="" id="download_hist_mod_data">Historical Modeled Data</a></li>
+            <li><a href="" id="download_proj_mod_data">Projected Modeled Data</a></li>
+        </ul>
+        <div class="center">
+            <button id="download-dismiss-button">Dismiss</button>
+        </div>
+    </div>
+</div>
+<a href="https://github.com/nemac/climate-widget-graph"  target="_blank">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+         alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+<!--[if IE]>
+<script>flexibility(document.documentElement);</script>
+<![endif]-->
+</body>
+</html>
