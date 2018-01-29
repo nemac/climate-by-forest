@@ -1142,7 +1142,7 @@ require("./plot.js")($);require("./renderer.js")($);require("./axis_title.js");r
                 ));
                 return_data.push([record[0], mean]);
         });
-        console.log(return_data);
+        // console.log(return_data);
         return return_data;
     }
 

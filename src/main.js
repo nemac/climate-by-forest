@@ -1132,7 +1132,7 @@
                 ));
                 return_data.push([record[0], mean]);
         });
-        console.log(return_data);
+        // console.log(return_data);
         return return_data;
     }
 
