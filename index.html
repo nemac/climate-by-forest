@@ -161,9 +161,9 @@
         }
         select:invalid { border-color: red; }
     </style>
-    <script src="vendor/multigraph-nojq-min.js"></script>
-    <script src="src/main.js"></script>
-    <!--<script src="climate-widget-graph.js"></script>-->
+    <!--<script src="vendor/multigraph-nojq-min.js"></script>-->
+    <!--<script src="src/main.js"></script>-->
+    <script src="climate-widget-graph.js"></script>
     <script src="demo.js"></script>
 
 </head>
@@ -171,13 +171,13 @@
 <div class="content">
     <div class="outlinebox" style="flex-basis: 30%; flex-shrink: 0; padding-bottom:6.5rem;">
         <div>
-            <h1>Forestry Bounding Box Mapping Tool To Be Named Later <span style="font-size: 60%;">(LOCA/Livneh)</span></h1>
+            <h1>Climate By Forest</h1>
         </div>
         <form onsubmit="return false;">
             <div class="row">
-                <div class="eight columns" style="min-width: 6rem;">
-                    <label for="bbox">Area</label>
-                    <select id="bbox" class="u-full-width">
+                <!--<div class="eight columns" style="min-width: 6rem;">-->
+                    <label for="forest">Forest</label>
+                    <select id="forest" class="u-full-width">
                         <option value="" selected ></option>
                         <option value="-95.22090271100001,30.948893069000007,-93.07941595400001,31.873959667999998">Piney Woods Transition One</option>
                         <option value="-95.66042261899997,30.914554555999985,-95.018716401,31.511366889999977">Piney Woods Transition Two</option>
@@ -191,7 +191,7 @@
                         <option value="-96.03224096100001,30.132117972000003,-93.57416032399999,31.258288295">Southern Loam Hills</option>
                         <option value="-94.76811249899998,31.518043579999983,-93.33745548799999,33.05997123200001">South Central Arkansas</option>
                     </select>
-                </div>
+                <!--</div>-->
             </div>
             <div class="row">
                 <label for="variable">Variable</label>
@@ -220,13 +220,10 @@
         <div id="widget">
             <div style="width: 100%; height: 100%; -js-display: flex; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <div>
-                    <h3>Please enter an area to begin</h3>
-                    <input id="countysearch" type="search" placeholder="Autauga County, AL" style="width:30em;">
-                    <p style="margin-top: 1em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5 data for your
-                        county.</p>
+                    <h3>Please select a forest begin</h3>
+                    <p style="margin-top: 1em; width:40em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5 data for forest ecoregions. Downscaled modeled data: LOCA. Historical observed data: Livneh.</p>
                 </div>
             </div>
-
         </div>
 
         <span id="x-axis-pan-note"
