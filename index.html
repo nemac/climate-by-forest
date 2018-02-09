@@ -34,14 +34,32 @@
                 width: 100% !important;
                 margin: 0;
             }
-            .outlinebox { margin: 1rem 0; }
+
+            .outlinebox {
+                margin: 1rem 0;
+            }
         }
+
         /* Landscape */
         @media screen and (orientation: landscape) {
-            .content { -js-display: flex; display: flex; flex-direction: row; overflow: auto }
-            .content .outlinebox { display: flex; flex-direction: column; }
-            .content, .outlinebox { flex: 1 1 auto; overflow: hidden; }
+            .content {
+                -js-display: flex;
+                display: flex;
+                flex-direction: row;
+                overflow: auto
+            }
+
+            .content .outlinebox {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content, .outlinebox {
+                flex: 1 1 auto;
+                overflow: hidden;
+            }
         }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -50,6 +68,7 @@
             background-color: #404952;
             font-family: Lato, serif;
         }
+
         body {
             -js-display: flex;
             display: flex;
@@ -57,6 +76,7 @@
             margin-left: 1rem;
             margin-right: 1rem;
         }
+
         .outlinebox {
             margin: 1rem;
             padding: 1.5rem;
@@ -65,6 +85,7 @@
             background-color: white;
             position: relative;
         }
+
         h1 {
             font-weight: 500;
             font-size: 3.25rem;
@@ -76,6 +97,7 @@
             margin-right: auto;
             width: 85%;
         }
+
         .nemac-logo {
             display: block;
             padding: 1rem;
@@ -83,13 +105,20 @@
             bottom: 0;
             left: 0;
         }
-        .nemac-logo > img { display: block; height: 5rem; margin: 1rem auto; }
+
+        .nemac-logo > img {
+            display: block;
+            height: 5rem;
+            margin: 1rem auto;
+        }
+
         #widget {
             height: 250px;
             width: 100%;
             flex: 1 1 auto;
             overflow: hidden;
         }
+
         .buttons-wrapper {
             -js-display: flex;
             display: flex;
@@ -97,6 +126,7 @@
             flex-wrap: wrap;
             margin: 0.5rem;
         }
+
         .btn {
             display: block;
             padding: 0.5em;
@@ -114,20 +144,25 @@
             user-select: none; /* Likely future */
             cursor: pointer;
         }
+
         .buttons-wrapper .fa {
             margin: 0 0.4em;
         }
+
         .buttons-wrapper input[type=checkbox] {
             display: none;
         }
+
         .buttons-wrapper > input[type=checkbox]:checked + label[for=rcp85] {
             border-color: #ff3835;
             background-color: rgba(255, 67, 67, 0.38);
         }
+
         .buttons-wrapper > input[type=checkbox]:checked + label[for=rcp45] {
             border-color: #4b93ff;
             background-color: rgba(75, 147, 255, 0.31);
         }
+
         #download-panel {
             position: absolute;
             width: 100%;
@@ -136,6 +171,7 @@
             top: 0;
             background-color: rgba(255, 255, 255, 0.8);
         }
+
         #download-panel .download-inner {
             margin: auto;
             position: relative;
@@ -145,21 +181,31 @@
             background-color: rgba(255, 255, 255, 1.0);
             padding: 30px;
         }
+
         #download-panel .download-inner li {
             margin-left: 50px;
         }
+
         #slider-range {
             width: 85%;
             margin: auto;
         }
-        label { margin-top: 0.5em; }
+
+        label {
+            margin-top: 0.5em;
+        }
+
         .center {
             text-align: center;
         }
+
         .hidden {
             display: none;
         }
-        select:invalid { border-color: red; }
+
+        select:invalid {
+            border-color: red;
+        }
     </style>
     <!--<script src="vendor/multigraph-nojq-min.js"></script>-->
     <!--<script src="src/main.js"></script>-->
@@ -176,21 +222,129 @@
         <form onsubmit="return false;">
             <div class="row">
                 <!--<div class="eight columns" style="min-width: 6rem;">-->
-                    <label for="forest">Ecoregion</label>
-                    <select id="forest" class="u-full-width">
-                        <option value="" selected ></option>
-                        <option value="-95.22090271100001,30.948893069000007,-93.07941595400001,31.873959667999998">Piney Woods Transition One</option>
-                        <option value="-95.66042261899997,30.914554555999985,-95.018716401,31.511366889999977">Piney Woods Transition Two</option>
-                        <option value="-94.25408181900002,30.26391057799998,-93.36242514999998,31.557211504999998">Sabine Alluvial Valley</option>
-                        <option value="-96.56037873100001,31.97971819899999,-93.22468025699999,34.00127428899998">Red River Alluvial Plain</option>
-                        <option value="-98.50405552400002,32.28335950100001,-97.32728361900001,33.83344323799997">Western Cross Timbers</option>
-                        <option value="-98.97047881499998,30.963897067000005,-97.12153367000002,33.85055920299999">Texas Grand Prairie</option>
-                        <option value="-98.88461361999998,29.272698117999994,-94.91056825300001,33.86796707899998">Blackland Prairie</option>
-                        <option value="-95.73067800199999,31.402474052000002,-93.92655945799999,33.64288459400001">Sand Hills</option>
-                        <option value="-95.878223176,29.714536873999975,-93.72245673999998,30.76068391199999">Southwest Flatwoods</option>
-                        <option value="-96.03224096100001,30.132117972000003,-93.57416032399999,31.258288295">Southern Loam Hills</option>
-                        <option value="-94.76811249899998,31.518043579999983,-93.33745548799999,33.05997123200001">South Central Arkansas</option>
-                    </select>
+                <label for="forest">National Forest</label>
+                <select id="forest" class="u-full-width">
+                    <option value="" selected></option>
+                    <option value="Allegheny National Forest">Allegheny National Forest</option>
+                    <option value="Angeles National Forest">Angeles National Forest</option>
+                    <option value="Apache-Sitgreaves National Forests">Apache-Sitgreaves National Forests</option>
+                    <option value="Arapaho and Roosevelt National Forests">Arapaho and Roosevelt National Forests</option>
+                    <option value="Ashley National Forest">Ashley National Forest</option>
+                    <option value="Beaverhead-Deerlodge National Forest">Beaverhead-Deerlodge National Forest</option>
+                    <option value="Bighorn National Forest">Bighorn National Forest</option>
+                    <option value="Bitterroot National Forest">Bitterroot National Forest</option>
+                    <option value="Black Hills National Forest">Black Hills National Forest</option>
+                    <option value="Boise National Forest">Boise National Forest</option>
+                    <option value="Bridger-Teton National Forest">Bridger-Teton National Forest</option>
+                    <option value="Caribou-Targhee National Forest">Caribou-Targhee National Forest</option>
+                    <option value="Carson National Forest">Carson National Forest</option>
+                    <option value="Chattahoochee-Oconee National Forests">Chattahoochee-Oconee National Forests</option>
+                    <option value="Chequamegon-Nicolet National Forest">Chequamegon-Nicolet National Forest</option>
+                    <option value="Cherokee National Forest">Cherokee National Forest</option>
+                    <option value="Chippewa National Forest">Chippewa National Forest</option>
+                    <option value="Cibola National Forest">Cibola National Forest</option>
+                    <option value="Cleveland National Forest">Cleveland National Forest</option>
+                    <option value="Coconino National Forest">Coconino National Forest</option>
+                    <option value="Columbia River Gorge National Scenic Area">Columbia River Gorge National Scenic Area</option>
+                    <option value="Colville National Forest">Colville National Forest</option>
+                    <option value="Coronado National Forest">Coronado National Forest</option>
+                    <option value="Custer National Forest">Custer National Forest</option>
+                    <option value="Dakota Prairie Grasslands">Dakota Prairie Grasslands</option>
+                    <option value="Daniel Boone National Forest">Daniel Boone National Forest</option>
+                    <option value="Deschutes National Forest">Deschutes National Forest</option>
+                    <option value="Dixie National Forest">Dixie National Forest</option>
+                    <option value="Eldorado National Forest">Eldorado National Forest</option>
+                    <option value="Fishlake National Forest">Fishlake National Forest</option>
+                    <option value="Flathead National Forest">Flathead National Forest</option>
+                    <option value="Francis Marion and Sumter National Forests">Francis Marion and Sumter National Forests</option>
+                    <option value="Fremont-Winema National Forests">Fremont-Winema National Forests</option>
+                    <option value="Gallatin National Forest">Gallatin National Forest</option>
+                    <option value="George Washington and Jefferson National Forest">George Washington and Jefferson National Forest</option>
+                    <option value="Gifford Pinchot National Forest">Gifford Pinchot National Forest</option>
+                    <option value="Gila National Forest">Gila National Forest</option>
+                    <option value="Grand Mesa, Uncompahgre and Gunnison National Forests">Grand Mesa, Uncompahgre and Gunnison National Forests</option>
+                    <option value="Green Mountain and Finger Lakes National Forests">Green Mountain and Finger Lakes National Forests</option>
+                    <option value="Helena National Forest">Helena National Forest</option>
+                    <option value="Hiawatha National Forest">Hiawatha National Forest</option>
+                    <option value="Hoosier National Forest">Hoosier National Forest</option>
+                    <option value="Humboldt-Toiyabe National Forest">Humboldt-Toiyabe National Forest</option>
+                    <option value="Huron-Manistee National Forest">Huron-Manistee National Forest</option>
+                    <option value="Idaho Panhandle National Forests">Idaho Panhandle National Forests</option>
+                    <option value="Inyo National Forest">Inyo National Forest</option>
+                    <option value="Kaibab National Forest">Kaibab National Forest</option>
+                    <option value="Kisatchie National Forest">Kisatchie National Forest</option>
+                    <option value="Klamath National Forest">Klamath National Forest</option>
+                    <option value="Kootenai National Forest">Kootenai National Forest</option>
+                    <option value="Lake Tahoe Basin Management Unit">Lake Tahoe Basin Management Unit</option>
+                    <option value="Land Between the Lakes">Land Between the Lakes</option>
+                    <option value="Lassen National Forest">Lassen National Forest</option>
+                    <option value="Lewis and Clark National Forest">Lewis and Clark National Forest</option>
+                    <option value="Lincoln National Forest">Lincoln National Forest</option>
+                    <option value="Lolo National Forest">Lolo National Forest</option>
+                    <option value="Los Padres National Forest">Los Padres National Forest</option>
+                    <option value="Malheur National Forest">Malheur National Forest</option>
+                    <option value="Manti-Lasal National Forest">Manti-Lasal National Forest</option>
+                    <option value="Mark Twain National Forest">Mark Twain National Forest</option>
+                    <option value="Medicine Bow-Routt National Forest">Medicine Bow-Routt National Forest</option>
+                    <option value="Mendocino National Forest">Mendocino National Forest</option>
+                    <option value="Midewin National Tallgrass Prairie">Midewin National Tallgrass Prairie</option>
+                    <option value="Modoc National Forest">Modoc National Forest</option>
+                    <option value="Monongahela National Forest">Monongahela National Forest</option>
+                    <option value="Mt Baker-Snoqualmie National Forest">Mt Baker-Snoqualmie National Forest</option>
+                    <option value="Mt. Hood National Forest">Mt. Hood National Forest</option>
+                    <option value="National Forests in Alabama">National Forests in Alabama</option>
+                    <option value="National Forests in Florida">National Forests in Florida</option>
+                    <option value="National Forests in Mississippi">National Forests in Mississippi</option>
+                    <option value="National Forests in North Carolina">National Forests in North Carolina</option>
+                    <option value="National Forests in Texas">National Forests in Texas</option>
+                    <option value="Nebraska National Forest">Nebraska National Forest</option>
+                    <option value="Nez Perce-Clearwater National Forest">Nez Perce-Clearwater National Forest</option>
+                    <option value="Ochoco National Forest">Ochoco National Forest</option>
+                    <option value="Okanogan-Wenatchee National Forest">Okanogan-Wenatchee National Forest</option>
+                    <option value="Olympic National Forest">Olympic National Forest</option>
+                    <option value="Ottawa National Forest">Ottawa National Forest</option>
+                    <option value="Ouachita National Forest">Ouachita National Forest</option>
+                    <option value="Ozark-St. Francis National Forest">Ozark-St. Francis National Forest</option>
+                    <option value="Payette National Forest">Payette National Forest</option>
+                    <option value="Pike and San Isabel National Forests">Pike and San Isabel National Forests</option>
+                    <option value="Plumas National Forest">Plumas National Forest</option>
+                    <option value="Prescott National Forest">Prescott National Forest</option>
+                    <option value="Rio Grande National Forest">Rio Grande National Forest</option>
+                    <option value="Rogue River-Siskiyou National Forests">Rogue River-Siskiyou National Forests</option>
+                    <option value="Salmon-Challis National Forest">Salmon-Challis National Forest</option>
+                    <option value="San Bernardino National Forest">San Bernardino National Forest</option>
+                    <option value="San Juan National Forest">San Juan National Forest</option>
+                    <option value="Santa Fe National Forest">Santa Fe National Forest</option>
+                    <option value="Savannah River Site">Savannah River Site</option>
+                    <option value="Sawtooth National Forest">Sawtooth National Forest</option>
+                    <option value="Sequoia National Forest">Sequoia National Forest</option>
+                    <option value="Shasta-Trinity National Forest">Shasta-Trinity National Forest</option>
+                    <option value="Shawnee National Forest">Shawnee National Forest</option>
+                    <option value="Shoshone National Forest">Shoshone National Forest</option>
+                    <option value="Sierra National Forest">Sierra National Forest</option>
+                    <option value="Siuslaw National Forest">Siuslaw National Forest</option>
+                    <option value="Six Rivers National Forest">Six Rivers National Forest</option>
+                    <option value="Stanislaus National Forest">Stanislaus National Forest</option>
+                    <option value="Superior National Forest">Superior National Forest</option>
+                    <option value="Tahoe National Forest">Tahoe National Forest</option>
+                    <option value="Tonto National Forest">Tonto National Forest</option>
+                    <option value="Uinta-Wasatch-Cache National Forest">Uinta-Wasatch-Cache National Forest</option>
+                    <option value="Umatilla National Forest">Umatilla National Forest</option>
+                    <option value="Umpqua National Forest">Umpqua National Forest</option>
+                    <option value="Wallowa-Whitman National Forest">Wallowa-Whitman National Forest</option>
+                    <option value="Wayne National Forest">Wayne National Forest</option>
+                    <option value="White Mountain National Forest">White Mountain National Forest</option>
+                    <option value="White River National Forest">White River National Forest</option>
+                    <option value="Willamette National Forest">Willamette National Forest</option>
+                </select>
+                <!--</div>-->
+            </div>
+            <div class="row">
+                <!--<div class="eight columns" style="min-width: 6rem;">-->
+                <label for="ecoregion">Ecoregion</label>
+                <select id="ecoregion" class="u-full-width">
+                    <option value="" selected></option>
+                </select>
                 <!--</div>-->
             </div>
             <div class="row">
@@ -221,7 +375,8 @@
             <div style="width: 100%; height: 100%; -js-display: flex; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <div>
                     <h3>Please select an ecoregion to begin.</h3>
-                    <p style="margin-top: 1em; width:40em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5 data for forest ecoregions. Downscaled modeled data: LOCA. Historical observed data: Livneh.</p>
+                    <p style="margin-top: 1em; width:40em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5
+                        data for forest ecoregions. Downscaled modeled data: LOCA. Historical observed data: Livneh.</p>
                 </div>
             </div>
         </div>
