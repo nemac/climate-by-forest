@@ -2,38 +2,28 @@ var cwg = undefined;
 
 $(document).ready(function () {
 
-        function populate_variables(frequency) {
-            var variables = climate_widget.variables(frequency);
-            $("select#variable").empty();
-            $(variables.map(function (v) {
-                return ('<option value="' + v.id + '"' + '>' + v.title + '</option>');
-            }).join("")).appendTo($("select#variable"));
-        }
+    function populate_variables(frequency) {
+        var variables = climate_widget.variables(frequency);
+        $("select#variable").empty();
+        $(variables.map(function (v) {
+            return ('<option value="' + v.id + '"' + '>' + v.title + '</option>');
+        }).join("")).appendTo($("select#variable"));
+    }
 
 
-    $('#forest').change(function () {
-        if ($('#forest').val() === '') {
-            return;
-        }
-        var ecoregions = ecoregion_list[$('#forest').val()];
-        console.log($('#forest').val());
-        var $el = $("#ecoregion");
-        $el.empty();
-        $el.append($('<option value=""  selected></option>'));
-        ecoregions.forEach(function (sc) {
-            $el.append($("<option></option>")
-                .attr("value", sc.bbox).text(sc.ecoregion));
-        });
-    });
+    $('#province').change(initGraphEcoregion);
+
+
 
         function initGraphEcoregion() {
+            console.log(ecoregion_list[$('#province').val()][0].bbox);
             cwg = climate_widget.graph({
                 'div': "div#widget",
                 'dataprefix': 'http://climate-widget-data.nemac.org/data',
                 'font': 'Roboto',
                 'frequency': $('#frequency').val(),
                 'timeperiod': $('#timeperiod').val(),
-                'bbox': $('#ecoregion').val(),
+                'bbox': ecoregion_list[$('#province').val()][0].bbox,
                 'variable': $('#variable').val(),
                 'scenario': $('#scenario').val(),
                 'xrangefunc': xrangeset,
