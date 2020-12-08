@@ -1,10 +1,18 @@
 {
   "name": "climate-by-forest",
-  "version": "0.1.0",
-  "description": "This library defines functions that can create and manage interactive climate widget graphs.",
-  "main": "climate-widget-graph.js",
+  "version": "0.2.0",
+  "description": "Interactive climate graphs for forests and ecoregions",
+  "main": "dist/climate-by-forest.js",
+  "maintainers": [
+    {
+      "name": "Josh Wilson",
+      "email": "jwilson@fernleafinteractive.com"
+    }
+  ],
   "scripts": {
-    "build": "uglifyjs vendor/multigraph-nojq-min.js src/main.js -o climate-widget-graph.js -c"
+    "build-dev": "rollup -c && cp areas.json dist/areas.json",
+    "build": "rollup -c --environment=\"build_env:prod\" && cp areas.json dist/areas.json",
+    "start": "node serve.js"
   },
   "repository": {
     "type": "git",
@@ -13,8 +21,31 @@
   "bugs": {
     "url": "https://github.com/nemac/climate-by-forest/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "core-js-bundle": "^3.6.5",
+    "unfetch": "^4.1.0"
+  },
   "devDependencies": {
-    "uglify-js": "^3.3.13"
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-arrow-functions": "^7.12.1",
+    "@babel/plugin-transform-object-assign": "^7.12.1",
+    "@babel/plugin-transform-regenerator": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.10.5",
+    "@babel/plugin-transform-template-literals": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "@rollup/plugin-babel": "^5.2.1",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "babel-polyfill": "^6.26.0",
+    "lodash-es": "^4.17.15",
+    "node-static": "~0.7.11",
+    "nodemon": "^2.0.4",
+    "rollup": "^2.23.0"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
   }
 }
