@@ -1,15 +1,13 @@
 'use strict';
 import 'unfetch/polyfill'
-import {find, get, identity, isEqual, max, mean, merge, min, range as lodash_range, round, forEach, flattenDeep, filter} from 'lodash-es';
-
-
+import {filter, find, flattenDeep, forEach, get, identity, isEqual, max, mean, merge, min, map, range as lodash_range, round} from 'lodash-es';
 // a couple module-level variables
 let _all_areas = null;
 /** @type Promise */
 let _when_areas = null;
 let _areas_json_url = 'areas.json';
 
-/* globals jQuery, window, Plotly, fetch */
+/* globals jQuery, window, Plotly, fetch, jStat */
 export default class ClimateByLocationWidget {
   /**
    * @param {Element|string|jQuery} element as jquery object, string query selector, or element object
@@ -329,6 +327,32 @@ export default class ClimateByLocationWidget {
     return true;
   }
 
+  download_significance(link) {
+    if (!this.downloadable_dataurls.significance && typeof this._compute_significance_stats !== "undefined" && !!this._compute_significance_stats) {
+      this._compute_significance_stats()
+    }
+
+    if (!this.downloadable_dataurls.significance) {
+      link.href = '#nodata';
+      return false;
+    }
+    link.href = this.downloadable_dataurls.significance;
+    link.download = [
+      this.options.get_area_label.bind(this)(),
+      this.options.frequency,
+      "significance",
+      this.options.variable
+    ].join('-').replace(/ /g, '_') + '.csv';
+    return true;
+  }
+
+
+  static _confidence_interval(n, s) {
+    const z = 1.96 // 95% confidence
+    s = s / 100;
+    return round(z * Math.sqrt((s * (1 - s)) / n) * 100, 1);
+  }
+
 
   /*
    * Private methods
@@ -346,6 +370,48 @@ export default class ClimateByLocationWidget {
     ])
 
     const variable_config = this.get_variable_config();
+
+    // prepare a function to compute significance, but don't do it yet.
+    this._compute_significance_stats = (hist_start_year = 1961, hist_end_year = 1990, proj_start_year = 2036, proj_end_year = 2065) => {
+      const p = 0.05 // 95% CI
+
+      let result = [] // scenario, stat, change, CI, significance
+      if ((hist_end_year - hist_start_year + 1) !== 30) {
+        throw new Error('Historical year range must be exactly 30 years.')
+      }
+      if ((proj_end_year - proj_start_year + 1) !== 30) {
+        throw new Error('Projected year range must be exactly 30 years.')
+      }
+      const t_score = 2.002; // t-score for two 30-sample series (df = (n_a - 1) + (n_b - 1))
+      for (const [i, stat] of ['mean', 'min', 'max'].entries()) {
+        const hist_col_offset = 1;
+        const hist_series = map(filter(hist_mod_data, (r) => r[0] >= hist_start_year && r[0] <= hist_end_year), v=>round(v[i + hist_col_offset],1))
+        const hist_mean = mean(hist_series);
+        const hist_var = jStat.variance(hist_series, true);
+        for (const scenario of ['rcp45', 'rcp85']) {
+          const proj_col_offset = (scenario === 'rcp45' ? 1 : 4)
+          // compute mean
+          // compute mean
+          const proj_series = map(filter(proj_mod_data, (r) => r[0] >= proj_start_year && r[0] <= proj_end_year), v=>round(v[i + proj_col_offset],1))
+          const proj_mean = mean(proj_series);
+          const proj_var = jStat.variance(proj_series, true);
+
+          // compute change stat
+          const change = proj_mean - hist_mean;
+          // compute CI
+          const ci = (Math.sqrt(2 * ((hist_var + proj_var) / 2) / 30)) * t_score; // I understand this line least, but it's consistent with the output I expect.
+          // F-test (larger variance as numerator to get right-sided
+          const f = 2 * jStat.ftest(Math.max(hist_var, proj_var) / Math.min(hist_var, proj_var), 29, 29);
+          // compute significance
+          const t_equal_variance = jStat.ttest(hist_series, proj_series, true, 2);
+          const t_unequal_variance = jStat.ttest(hist_series, proj_series, false, 2);
+          const significant = ((f < p) && t_equal_variance < p) || (f >= p && t_unequal_variance < p)
+          result.push([this.options.variable, scenario, stat, hist_mean, proj_mean,  change, ci, f, t_equal_variance, t_unequal_variance, significant ? 'S' : 'NS' ])
+        }
+      }
+
+      this.downloadable_dataurls.significance = this._format_export_data(['variable', 'scenario', 'stat', 'hist_mean', 'proj_mean',  'change', 'CI', 'ftest','ttest_ev','ttest_uv','significance'], result)
+    }
 
     this.downloadable_dataurls.hist_obs = this._format_export_data(['year', variable_config.id], hist_obs_data);
     this.downloadable_dataurls.hist_mod = this._format_export_data(['year', 'weighted_mean', 'min', 'max'], hist_mod_data);
@@ -1946,9 +2012,11 @@ export default class ClimateByLocationWidget {
     this.downloadable_dataurls = {
       hist_obs: '',
       hist_mod: '',
-      proj_mod: ''
+      proj_mod: '',
+      significance: ''
     };
   }
+
 
   /*
    * Public static methods
@@ -3063,3 +3131,16 @@ export default class ClimateByLocationWidget {
 }
 
 
+function unequalVar_dof(array1, array2) {
+  let s1, s2, n1, n2, v1, v2, numerator, denominator, dof_v;
+  s1 = jStat.stdev(array1, true)
+  s2 = jStat.stdev(array2, true)
+  n1 = array1.length
+  n2 = array2.length
+  v1 = n1 - 1
+  v2 = n2 - 1
+  numerator = Math.pow(Math.pow(s1, 2) / n1 + Math.pow(s2, 2) / n2, 2)
+  denominator = (Math.pow(s1, 4) / (Math.pow(n1, 2) * v1)) + (Math.pow(s2, 4) / (Math.pow(n2, 2) * v2))
+  dof_v = numerator / denominator
+  return dof_v
+}

@@ -58,7 +58,7 @@ jQuery(document).ready(function ($) {
       'font': 'Roboto',
       'frequency': $('#frequency').val(),
       'monthly_timeperiod': $('#timeperiod').val(),
-      'area_id': $('#other_areas').val() || $('#county').val() || $('#state').val() || $('#forest').val() || $('#ecoregion').val(),
+      'area_id': $('#other_areas').val() || $('#county').val() || $('#state').val()  || $('#ecoregion').val() || $('#forest').val(),
       'variable': $('#variable').val(),
     });
   }
@@ -66,7 +66,7 @@ jQuery(document).ready(function ($) {
 
   function update_variable_options(frequency = null, area_id = null, variable = null) {
 
-    ClimateByLocationWidget.when_variables({frequency: frequency || $('#frequency').val(), unitsystem: null, area_id: area_id || $('#county').val() || $('#state').val() || $('#forest').val() || $('#ecoregion').val()}).then((variables) => {
+    ClimateByLocationWidget.when_variables({frequency: frequency || $('#frequency').val(), unitsystem: null, area_id: area_id || $('#county').val() || $('#state').val() || $('#ecoregion').val() || $('#forest').val()}).then((variables) => {
       $("select#variable").empty();
       $(variables.map(v => (`<option value="${v.id}">${v.title}</option>`)).join("")).appendTo($("select#variable"));
       if (!!variable) {
@@ -179,7 +179,7 @@ jQuery(document).ready(function ($) {
 
   ClimateByLocationWidget.when_areas({}).then((areas) => {
     $("#areasearch").autocomplete({
-      source: areas.map((area) => ({label: area.area_label + (area['area_type'] === 'ecoregion' ? (', ' + ClimateByLocationWidget.find_area({area_id: area['forest']})['area_label']) : ''), value: area.area_id})),
+      source: areas.filter((area) => (area['area_type'] === 'ecoregion')).map((area) => ({label: area.area_label, value: area.area_id})),
       select: function (event, ui) {
         const area = ClimateByLocationWidget.find_area({type: null, state: null, area_id: ui.item.value});
         if (area['area_type'] === 'state') {
@@ -343,6 +343,18 @@ jQuery(document).ready(function ($) {
     if (!cbl_instance.download_proj_mod_data(this)) {
       e.preventDefault()
       $('#download_error').text('There is no projected modeled data available for the current selection.').show()
+      window.setTimeout(() => {
+        $('#download_error').hide()
+      }, 3000)
+    }
+  });
+  $('#download_significance_report').click(function (e) {
+    if (!cbl_instance) {
+      return;
+    }
+    if (!cbl_instance.download_significance(this)) {
+      e.preventDefault()
+      $('#download_error').text('Failed to compute significance for the current parameters.').show()
       window.setTimeout(() => {
         $('#download_error').hide()
       }, 3000)
