@@ -28,7 +28,7 @@ jQuery(document).ready(function ($) {
         $('#other_areas').val('');
       } else if (area['area_type'] === 'ecoregion') {
         $('#ecoregion').val(area['area_id']);
-        $('#forest').val(area['forest']);
+        $('#forest').val(area['forest'][0]);
         $('#other_areas').val('');
       } else if (area['area_type'] === 'island') {
         $('#other_areas').val(area['area_id']);
@@ -58,7 +58,8 @@ jQuery(document).ready(function ($) {
       'font': 'Roboto',
       'frequency': $('#frequency').val(),
       'monthly_timeperiod': $('#timeperiod').val(),
-      'area_id': $('#other_areas').val() || $('#county').val() || $('#state').val()  || $('#ecoregion').val() || $('#forest').val(),
+      // 'area_id': $('#other_areas').val() || $('#county').val() || $('#state').val()  || $('#ecoregion').val() || $('#forest').val(),
+      'area_id': $('#other_areas').val() || $('#county').val() || $('#state').val()  || $('#ecoregion').val(),
       'variable': $('#variable').val(),
     });
   }
@@ -66,7 +67,12 @@ jQuery(document).ready(function ($) {
 
   function update_variable_options(frequency = null, area_id = null, variable = null) {
 
-    ClimateByLocationWidget.when_variables({frequency: frequency || $('#frequency').val(), unitsystem: null, area_id: area_id || $('#county').val() || $('#state').val() || $('#ecoregion').val() || $('#forest').val()}).then((variables) => {
+    ClimateByLocationWidget.when_variables({
+      frequency: frequency || $('#frequency').val(),
+      unitsystem: null,
+      area_id: area_id || $('#county').val() || $('#state').val() || $('#ecoregion').val()
+      // area_id: area_id || $('#county').val() || $('#state').val() || $('#ecoregion').val() || $('#forest').val()
+    }).then((variables) => {
       $("select#variable").empty();
       $(variables.map(v => (`<option value="${v.id}">${v.title}</option>`)).join("")).appendTo($("select#variable"));
       if (!!variable) {
@@ -197,7 +203,7 @@ jQuery(document).ready(function ($) {
           update_ecoregion_options()
           init_climate_by_location();
         } else if (area['area_type'] === 'ecoregion') {
-          $('#forest option[value="' + area['forest'] + '"]').prop('selected', 'selected');
+          $('#forest option[value="' + area['forests'][0] + '"]').prop('selected', 'selected');
           update_ecoregion_options().then(() => {
             $('#ecoregion option[value="' + area['area_id'] + '"]').prop('selected', 'selected');
             init_climate_by_location();
@@ -239,13 +245,13 @@ jQuery(document).ready(function ($) {
     }
     update_ecoregion_options();
 
-    if (!cbl_instance) {
-      init_climate_by_location();
-    } else {
-      cbl_instance.update({
-        area_id: $('#forest').val()
-      });
-    }
+    // if (!cbl_instance) {
+    //   init_climate_by_location();
+    // } else {
+    //   cbl_instance.update({
+    //     area_id: $('#forest').val()
+    //   });
+    // }
     update_controls();
   });
 
@@ -348,7 +354,7 @@ jQuery(document).ready(function ($) {
       }, 3000)
     }
   });
-  $('#download_significance_report').click(function (e) {
+  $('#download_significance_report,#download_significance_report-button').click(function (e) {
     if (!cbl_instance) {
       return;
     }

@@ -189,7 +189,7 @@ export default class ClimateByLocationWidget {
 
 
   /**
-   * Requests the widget update according to its current options. Use `set_options()` to change options instead.
+   * Requests the widget update according to its current options. Use `update()` to change options instead.
    * @returns {Promise<void>}
    */
   async _update() {
@@ -340,8 +340,8 @@ export default class ClimateByLocationWidget {
     link.download = [
       this.options.get_area_label.bind(this)(),
       this.options.frequency,
-      "significance",
-      this.options.variable
+      this.options.variable,
+      "significance"
     ].join('-').replace(/ /g, '_') + '.csv';
     return true;
   }
@@ -374,7 +374,7 @@ export default class ClimateByLocationWidget {
     // prepare a function to compute significance, but don't do it yet.
     this._compute_significance_stats = (hist_start_year = 1961, hist_end_year = 1990, proj_start_year = 2036, proj_end_year = 2065) => {
       const p = 0.05 // 95% CI
-
+      const n = 30;
       let result = [] // scenario, stat, change, CI, significance
       if ((hist_end_year - hist_start_year + 1) !== 30) {
         throw new Error('Historical year range must be exactly 30 years.')
@@ -385,32 +385,32 @@ export default class ClimateByLocationWidget {
       const t_score = 2.002; // t-score for two 30-sample series (df = (n_a - 1) + (n_b - 1))
       for (const [i, stat] of ['mean', 'min', 'max'].entries()) {
         const hist_col_offset = 1;
-        const hist_series = map(filter(hist_mod_data, (r) => r[0] >= hist_start_year && r[0] <= hist_end_year), v=>round(v[i + hist_col_offset],1))
+        const hist_series = map(filter(hist_mod_data, (r) => r[0] >= hist_start_year && r[0] <= hist_end_year), v=>round(v[i + hist_col_offset],4))
         const hist_mean = mean(hist_series);
         const hist_var = jStat.variance(hist_series, true);
         for (const scenario of ['rcp45', 'rcp85']) {
           const proj_col_offset = (scenario === 'rcp45' ? 1 : 4)
           // compute mean
           // compute mean
-          const proj_series = map(filter(proj_mod_data, (r) => r[0] >= proj_start_year && r[0] <= proj_end_year), v=>round(v[i + proj_col_offset],1))
+          const proj_series = map(filter(proj_mod_data, (r) => r[0] >= proj_start_year && r[0] <= proj_end_year), v=>round(v[i + proj_col_offset],4))
           const proj_mean = mean(proj_series);
           const proj_var = jStat.variance(proj_series, true);
 
           // compute change stat
           const change = proj_mean - hist_mean;
           // compute CI
-          const ci = (Math.sqrt(2 * ((hist_var + proj_var) / 2) / 30)) * t_score; // I understand this line least, but it's consistent with the output I expect.
+          const ci = (Math.sqrt(2 * ((hist_var + proj_var) / 2) / n)) * t_score; // I understand this line least, but it's consistent with the output I expect.
           // F-test (larger variance as numerator to get right-sided
-          const f = 2 * jStat.ftest(Math.max(hist_var, proj_var) / Math.min(hist_var, proj_var), 29, 29);
+          const f = 2 * jStat.ftest(Math.max(hist_var, proj_var) / Math.min(hist_var, proj_var), n-1, n-1);
           // compute significance
           const t_equal_variance = jStat.ttest(hist_series, proj_series, true, 2);
           const t_unequal_variance = jStat.ttest(hist_series, proj_series, false, 2);
           const significant = ((f < p) && t_equal_variance < p) || (f >= p && t_unequal_variance < p)
-          result.push([this.options.variable, scenario, stat, hist_mean, proj_mean,  change, ci, f, t_equal_variance, t_unequal_variance, significant ? 'S' : 'NS' ])
+          result.push([this.options.area_id, this.options.variable, scenario, stat, round(hist_mean,1), round(proj_mean,1),  round(change, 1), round(ci, 5), round(f, 5), round(t_equal_variance, 5), round(t_unequal_variance,5), significant ? 'S' : 'NS' ])
         }
       }
 
-      this.downloadable_dataurls.significance = this._format_export_data(['variable', 'scenario', 'stat', 'hist_mean', 'proj_mean',  'change', 'CI', 'ftest','ttest_ev','ttest_uv','significance'], result)
+      this.downloadable_dataurls.significance = this._format_export_data(['area_id', 'variable', 'scenario', 'stat', 'hist_mean', 'proj_mean',  'change', 'CI', 'ftest','ttest_ev','ttest_uv','significance'], result)
     }
 
     this.downloadable_dataurls.hist_obs = this._format_export_data(['year', variable_config.id], hist_obs_data);
@@ -2009,6 +2009,7 @@ export default class ClimateByLocationWidget {
 
 
   _reset_downloadable_dataurls() {
+    this._compute_significance_stats = null;
     this.downloadable_dataurls = {
       hist_obs: '',
       hist_mod: '',
@@ -2073,13 +2074,13 @@ export default class ClimateByLocationWidget {
 
   /**
    * Gets available areas based on type or the state they belong to (counties only).
-   * @param type {string|null} Area type to filter by. Any of 'state', 'county', 'island'.
+   * @param type {string|null} Area type to filter by. Any of 'state', 'county', 'island', 'ecoregion', 'forest'.
    * @param state {string|null} Two-digit abbreviation of state to filter by. Implies type='state'
    * @param forest {string|null} Two-digit abbreviation of state to filter by. Implies type='state'
    * @param area_id {string|null} Area id to filter by. Will never return more than 1 result.
    * @returns Promise<array<{area_id, area_label, area_type, state}>>
    */
-  static when_areas({type = null, state = null, forest = null, area_id = null}) {
+  static when_areas({type = null, state = null, forest = null, area_id = null}={}) {
     if (ClimateByLocationWidget._all_areas === null && ClimateByLocationWidget._when_areas === null) {
       ClimateByLocationWidget._when_areas = fetch(ClimateByLocationWidget.areas_json_url).then((response) => response.json()).then(data => {
         if (!data) {
@@ -2093,7 +2094,7 @@ export default class ClimateByLocationWidget {
 
   /**
    * Gets available areas based on type or the state they belong to (counties only). If called before areas are loaded, returns empty.
-   * @param type {string|null} Area type to filter by. Any of 'state', 'county', 'island'.
+   * @param type {string|null} Area type to filter by. Any of 'state', 'county', 'island', 'ecoregion', 'forest'.
    * @param state {string|null} Two-digit abbreviation of state to filter by. Implies type='state'
    * @param forest {string|null} snake_case id of forest to filter by. Implies type='forest'
    * @param area_id {string|null} Area id to filter by. Will never return more than 1 result.
@@ -2114,7 +2115,7 @@ export default class ClimateByLocationWidget {
     }
     if (!!forest) {
       forest = String(forest).toLowerCase();
-      return ClimateByLocationWidget._all_areas.filter((area) => area['area_type'] === 'ecoregion' && area.forest === forest);
+      return ClimateByLocationWidget._all_areas.filter((area) => area['area_type'] === 'ecoregion' && area['forests'].includes(forest));
     }
     if (!!type) {
       type = String(type).toLowerCase();
@@ -2128,7 +2129,7 @@ export default class ClimateByLocationWidget {
 
   /**
    * Gets available areas based on type or the state/forest they belong to (counties/ecoregions only). Returns first area. If called before areas are loaded, returns empty.
-   * @param type {string|null} Area type to filter by. Any of 'state', 'county', 'island'.
+   * @param type {string|null} Area type to filter by. Any of 'state', 'county', 'island', 'ecoregion', 'forest'.
    * @param state {string|null} Two-digit abbreviation of state to filter by. Implies type='state'
    * @param forest {string|null} snake_case id of forest to filter by. Implies type='forest'
    * @param area_id {string|null} Area id to filter by. Will never return more than 1 result.

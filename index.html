@@ -107,6 +107,8 @@
       display: block;
       height: 5rem;
       margin: 1rem auto;
+      max-width: 100%;
+      object-fit: scale-down;
     }
 
     #widget {
@@ -148,6 +150,13 @@
 
     .buttons-wrapper input[type=checkbox] {
       display: none;
+    }
+
+    .buttons-wrapper > input[type=checkbox]:checked + label[for=histobs] {
+      background-color: #999999;
+    }
+    .buttons-wrapper > input[type=checkbox]:checked + label[for=histmod] {
+      background-color:  #d3d3d3;
     }
 
     .buttons-wrapper > input[type=checkbox]:checked + label[for=rcp85] {
@@ -221,7 +230,7 @@
       <h1>Climate By Forest (Dec 2020)</h1>
     </div>
     <form onsubmit="return false;">
-      <div class="row">
+    <!--  <div class="row">
         <div class="four columns" style="min-width: 6rem;">
           <label for="state">State</label>
           <select id="state" class="u-full-width">
@@ -283,14 +292,14 @@
           <label for="county">County</label>
           <select id="county" class="u-full-width">
             <option value="" selected></option>
-            <!--
+            &lt;!&ndash;
              <option value="37021" selected="selected">Buncombe County, NC</option>
              <option value="41003">Benton County, OR</option>
              <option value="04027">Yuma County, AZ</option>
              <option value="53009">Clallam County, WA</option>
              <option value="27077">Lake of the Woods County, MN</option>
              <option value="30009">Lewis and Clark County, MT</option>
-            -->
+            &ndash;&gt;
           </select>
         </div>
       </div>
@@ -299,7 +308,7 @@
         <select name="" id="other_areas" class="u-full-width">
           <option value="" selected></option>
         </select>
-      </div>
+      </div>-->
       <div class="row">
         <!--<div class="eight columns" style="min-width: 6rem;">-->
         <label for="forest">National Forest</label>
@@ -449,17 +458,18 @@
         </select>
       </div>
     </form>
-    <a href="http://nemacfernleaf.com/" class="nemac-logo" target="_blank"><img src="http://nemacfernleaf.com/resources/images/NF_logo.png"
+    <a href="https://nemacfernleaf.com/" class="nemac-logo" target="_blank"><img src="https://nemacfernleaf.com/resources/images/NF_logo.png"
                                                                                 alt="National Environmental Modeling and Analysis Center"></a>
   </div>
   <div class="outlinebox" style="flex-basis: 70%; flex-shrink:1;">
     <div id="widget">
       <div style="width: 100%; height: 100%; -js-display: flex; display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <div>
-          <h3>Please enter a state, county, island, or ecoregion name to begin</h3>
-          <input id="areasearch" type="search" placeholder="Autauga County, AL" style="width:40em;">
-          <p style="margin-top: 1em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5 data for your
-            county.</p>
+          <h3>Please enter an ecoregion name to begin</h3>
+<!--          <h3>Please enter a state, county, island, or ecoregion name to begin</h3>-->
+          <input id="areasearch" type="search" placeholder="Southern Blue Ridge Mountains" style="width:40em;">
+          <p style="margin-top: 1em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5
+            data for forest ecoregions.<br> Downscaled modeled data: LOCA. Historical observed data: Livneh.</p>
         </div>
       </div>
     </div>
@@ -468,14 +478,18 @@
     <div id="slider-range"></div>
     <div class="buttons-wrapper">
       <input type="checkbox" name="histmod" id="histmod" checked>
-      <label for="histmod" class="btn" style="background-color: #d3d3d3;"><i class="fa fa-area-chart" aria-hidden="true"></i>Modeled History</label>
+      <label for="histmod" class="btn" ><i class="fa fa-area-chart" aria-hidden="true"></i>Modeled History</label>
       <input type="checkbox" name="histobs" id="histobs" checked>
-      <label for="histobs" class="btn" style="background-color: #ffffff;"><i class="fa fa-bar-chart" aria-hidden="true"></i>Observed History</label>
+      <label for="histobs" class="btn"><i class="fa fa-bar-chart" aria-hidden="true"></i>Observed History</label>
       <input type="checkbox" name="rcp85" id="rcp85" checked>
       <label for="rcp85" class="btn"><i class="fa fa-area-chart" aria-hidden="true"></i>RCP 8.5</label>
       <input type="checkbox" name="rcp45" id="rcp45" checked>
       <label for="rcp45" class="btn"><i class="fa fa-area-chart" aria-hidden="true"></i>RCP 4.5</label>
       <div style="margin-left: auto; -js-display: flex; display: flex; flex-direction: row;">
+        <button class="btn"><a id="download_significance_report-button" title="Download statistical significance report (annual only)"><i
+            class="fa fa-balance-scale"
+            style="color: #555;"
+            aria-label="Download statistical significance report (annual only)"></i></a></button>
         <button class="btn" id="download-button" title="Download Data"><i
             class="fa fa-download"
             aria-label="Download Data"></i></button>
@@ -494,7 +508,7 @@
       <li><a href="" id="download_hist_obs_data">Observed Data</a></li>
       <li id="download_hist_mod_data_li"><a href="" id="download_hist_mod_data">Historical Modeled Data</a></li>
       <li><a href="" id="download_proj_mod_data">Projected Modeled Data</a></li>
-      <li><a href="" id="download_significance_report">Significance Report</a></li>
+<!--      <li><a href="" id="download_significance_report">Statistical Significance Report (annual only)</a></li>-->
     </ul>
     <div id="download_error" class="error" style="display: none; color: red; font-size: 1.2em; margin:1rem 0;"></div>
     <div class="center">
