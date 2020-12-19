@@ -53,14 +53,14 @@
 
       .content, .outlinebox {
         flex: 1 1 auto;
-        overflow: hidden;
+        overflow: auto;
       }
     }
 
     html, body {
       margin: 0;
       padding: 0;
-      min-height: 500px;
+      /*min-height: 500px;*/
       height: 100vh;
       background-color: #404952;
       font-family: Lato, serif;
@@ -98,9 +98,7 @@
     .nemac-logo {
       display: block;
       padding: 1rem;
-      position: absolute;
-      bottom: 0;
-      left: 0;
+      margin-top: auto;
     }
 
     .nemac-logo > img {
@@ -129,19 +127,25 @@
     .btn {
       display: block;
       padding: 0.5em;
-      margin: 0.5em;
+      margin: 0.2rem 0.5rem;
       border: solid 2px grey;
       border-radius: 3px;
       font-weight: bold;
-      font-size: 1em;
+      font-size: 1.6rem;
       white-space: nowrap;
       flex-shrink: 0;
-      min-height: 1.6em;
+      line-height: 2rem;
       -webkit-user-select: none; /* Chrome all / Safari all */
       -moz-user-select: none; /* Firefox all */
       -ms-user-select: none; /* IE 10+ */
       user-select: none; /* Likely future */
       cursor: pointer;
+    }
+    .btn:hover{
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .btn:active{
+      filter: brightness(90%);
     }
 
     .buttons-wrapper .fa {
@@ -155,8 +159,9 @@
     .buttons-wrapper > input[type=checkbox]:checked + label[for=histobs] {
       background-color: #999999;
     }
+
     .buttons-wrapper > input[type=checkbox]:checked + label[for=histmod] {
-      background-color:  #d3d3d3;
+      background-color: #d3d3d3;
     }
 
     .buttons-wrapper > input[type=checkbox]:checked + label[for=rcp85] {
@@ -193,8 +198,8 @@
     }
 
     #slider-range {
-      width: 85%;
-      margin: auto;
+      width: 90%;
+      margin: 1rem auto;
     }
 
     label {
@@ -225,90 +230,90 @@
 </head>
 <body>
 <div class="content">
-  <div class="outlinebox" style="flex-basis: 30%; flex-shrink: 0; padding-bottom:6.5rem;">
+  <div class="outlinebox" style="flex-basis: 30%; flex-shrink: 0;">
     <div>
       <h1>Climate By Forest (Dec 2020)</h1>
     </div>
     <form onsubmit="return false;">
-    <!--  <div class="row">
-        <div class="four columns" style="min-width: 6rem;">
-          <label for="state">State</label>
-          <select id="state" class="u-full-width">
-            <option value="" selected></option>
-            <option value="AL">AL</option>
-            <option value="AK">AK</option>
-            <option value="AZ">AZ</option>
-            <option value="AR">AR</option>
-            <option value="CA">CA</option>
-            <option value="CO">CO</option>
-            <option value="CT">CT</option>
-            <option value="DE">DE</option>
-            <option value="FL">FL</option>
-            <option value="GA">GA</option>
-            <option value="HI" disabled title="See options in &quot;Island states and territories&quot;">HI</option>
-            <option value="ID">ID</option>
-            <option value="IL">IL</option>
-            <option value="IN">IN</option>
-            <option value="IA">IA</option>
-            <option value="KS">KS</option>
-            <option value="KY">KY</option>
-            <option value="LA">LA</option>
-            <option value="ME">ME</option>
-            <option value="MD">MD</option>
-            <option value="MA">MA</option>
-            <option value="MI">MI</option>
-            <option value="MN">MN</option>
-            <option value="MS">MS</option>
-            <option value="MO">MO</option>
-            <option value="MT">MT</option>
-            <option value="NE">NE</option>
-            <option value="NV">NV</option>
-            <option value="NH">NH</option>
-            <option value="NJ">NJ</option>
-            <option value="NM">NM</option>
-            <option value="NY">NY</option>
-            <option value="NC">NC</option>
-            <option value="ND">ND</option>
-            <option value="OH">OH</option>
-            <option value="OK">OK</option>
-            <option value="OR">OR</option>
-            <option value="PA">PA</option>
-            <option value="RI">RI</option>
-            <option value="SC">SC</option>
-            <option value="SD">SD</option>
-            <option value="TN">TN</option>
-            <option value="TX">TX</option>
-            <option value="UT">UT</option>
-            <option value="VT">VT</option>
-            <option value="VA">VA</option>
-            <option value="WA">WA</option>
-            <option value="WV">WV</option>
-            <option value="WI">WI</option>
-            <option value="WY">WY</option>
-          </select>
+      <!--  <div class="row">
+          <div class="four columns" style="min-width: 6rem;">
+            <label for="state">State</label>
+            <select id="state" class="u-full-width">
+              <option value="" selected></option>
+              <option value="AL">AL</option>
+              <option value="AK">AK</option>
+              <option value="AZ">AZ</option>
+              <option value="AR">AR</option>
+              <option value="CA">CA</option>
+              <option value="CO">CO</option>
+              <option value="CT">CT</option>
+              <option value="DE">DE</option>
+              <option value="FL">FL</option>
+              <option value="GA">GA</option>
+              <option value="HI" disabled title="See options in &quot;Island states and territories&quot;">HI</option>
+              <option value="ID">ID</option>
+              <option value="IL">IL</option>
+              <option value="IN">IN</option>
+              <option value="IA">IA</option>
+              <option value="KS">KS</option>
+              <option value="KY">KY</option>
+              <option value="LA">LA</option>
+              <option value="ME">ME</option>
+              <option value="MD">MD</option>
+              <option value="MA">MA</option>
+              <option value="MI">MI</option>
+              <option value="MN">MN</option>
+              <option value="MS">MS</option>
+              <option value="MO">MO</option>
+              <option value="MT">MT</option>
+              <option value="NE">NE</option>
+              <option value="NV">NV</option>
+              <option value="NH">NH</option>
+              <option value="NJ">NJ</option>
+              <option value="NM">NM</option>
+              <option value="NY">NY</option>
+              <option value="NC">NC</option>
+              <option value="ND">ND</option>
+              <option value="OH">OH</option>
+              <option value="OK">OK</option>
+              <option value="OR">OR</option>
+              <option value="PA">PA</option>
+              <option value="RI">RI</option>
+              <option value="SC">SC</option>
+              <option value="SD">SD</option>
+              <option value="TN">TN</option>
+              <option value="TX">TX</option>
+              <option value="UT">UT</option>
+              <option value="VT">VT</option>
+              <option value="VA">VA</option>
+              <option value="WA">WA</option>
+              <option value="WV">WV</option>
+              <option value="WI">WI</option>
+              <option value="WY">WY</option>
+            </select>
 
+          </div>
+          <div class="eight columns" style="min-width: 15rem;">
+            <label for="county">County</label>
+            <select id="county" class="u-full-width">
+              <option value="" selected></option>
+              &lt;!&ndash;
+               <option value="37021" selected="selected">Buncombe County, NC</option>
+               <option value="41003">Benton County, OR</option>
+               <option value="04027">Yuma County, AZ</option>
+               <option value="53009">Clallam County, WA</option>
+               <option value="27077">Lake of the Woods County, MN</option>
+               <option value="30009">Lewis and Clark County, MT</option>
+              &ndash;&gt;
+            </select>
+          </div>
         </div>
-        <div class="eight columns" style="min-width: 15rem;">
-          <label for="county">County</label>
-          <select id="county" class="u-full-width">
+        <div class="row">
+          <label for="other_areas">Island states and territories</label>
+          <select name="" id="other_areas" class="u-full-width">
             <option value="" selected></option>
-            &lt;!&ndash;
-             <option value="37021" selected="selected">Buncombe County, NC</option>
-             <option value="41003">Benton County, OR</option>
-             <option value="04027">Yuma County, AZ</option>
-             <option value="53009">Clallam County, WA</option>
-             <option value="27077">Lake of the Woods County, MN</option>
-             <option value="30009">Lewis and Clark County, MT</option>
-            &ndash;&gt;
           </select>
-        </div>
-      </div>
-      <div class="row">
-        <label for="other_areas">Island states and territories</label>
-        <select name="" id="other_areas" class="u-full-width">
-          <option value="" selected></option>
-        </select>
-      </div>-->
+        </div>-->
       <div class="row">
         <!--<div class="eight columns" style="min-width: 6rem;">-->
         <label for="forest">National Forest</label>
@@ -459,14 +464,14 @@
       </div>
     </form>
     <a href="https://nemacfernleaf.com/" class="nemac-logo" target="_blank"><img src="https://nemacfernleaf.com/resources/images/NF_logo.png"
-                                                                                alt="National Environmental Modeling and Analysis Center"></a>
+                                                                                 alt="National Environmental Modeling and Analysis Center"></a>
   </div>
   <div class="outlinebox" style="flex-basis: 70%; flex-shrink:1;">
     <div id="widget">
       <div style="width: 100%; height: 100%; -js-display: flex; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <div>
+        <div style="max-width:100%;">
           <h3>Please enter an ecoregion name to begin</h3>
-<!--          <h3>Please enter a state, county, island, or ecoregion name to begin</h3>-->
+          <!--          <h3>Please enter a state, county, island, or ecoregion name to begin</h3>-->
           <input id="areasearch" type="search" placeholder="Southern Blue Ridge Mountains" style="width:40em;">
           <p style="margin-top: 1em;">This interactive graph shows modeled RCP 8.5 and RCP 4.5
             data for forest ecoregions.<br> Downscaled modeled data: LOCA. Historical observed data: Livneh.</p>
@@ -478,7 +483,7 @@
     <div id="slider-range"></div>
     <div class="buttons-wrapper">
       <input type="checkbox" name="histmod" id="histmod" checked>
-      <label for="histmod" class="btn" ><i class="fa fa-area-chart" aria-hidden="true"></i>Modeled History</label>
+      <label for="histmod" class="btn"><i class="fa fa-area-chart" aria-hidden="true"></i>Modeled History</label>
       <input type="checkbox" name="histobs" id="histobs" checked>
       <label for="histobs" class="btn"><i class="fa fa-bar-chart" aria-hidden="true"></i>Observed History</label>
       <input type="checkbox" name="rcp85" id="rcp85" checked>
@@ -486,16 +491,10 @@
       <input type="checkbox" name="rcp45" id="rcp45" checked>
       <label for="rcp45" class="btn"><i class="fa fa-area-chart" aria-hidden="true"></i>RCP 4.5</label>
       <div style="margin-left: auto; -js-display: flex; display: flex; flex-direction: row;">
-        <button class="btn"><a id="download_significance_report-button" title="Download statistical significance report (annual only)"><i
-            class="fa fa-balance-scale"
-            style="color: #555;"
-            aria-label="Download statistical significance report (annual only)"></i></a></button>
-        <button class="btn" id="download-button" title="Download Data"><i
-            class="fa fa-download"
-            aria-label="Download Data"></i></button>
-        <button class="btn"><a id="download-image-link" title="Download Image"><i class=" fa fa-picture-o"
-                                                                                  aria-label="Download Image"></i></a>
-        </button>
+        <a id="download_significance_report-button" class="btn" title="Download statistical significance report (annual only)">
+          <i class="fa fa-balance-scale" style="color: #555;" aria-label="Download statistical significance report (annual only)"></i></a>
+        <button class="btn" id="download-button" title="Download Data"><i class="fa fa-download" aria-label="Download Data"></i></button>
+        <a id="download-image-link" class="btn" title="Download Image"><i class="fa fa-picture-o" aria-label="Download Image"></i></a>
       </div>
 
     </div>
@@ -508,7 +507,7 @@
       <li><a href="" id="download_hist_obs_data">Observed Data</a></li>
       <li id="download_hist_mod_data_li"><a href="" id="download_hist_mod_data">Historical Modeled Data</a></li>
       <li><a href="" id="download_proj_mod_data">Projected Modeled Data</a></li>
-<!--      <li><a href="" id="download_significance_report">Statistical Significance Report (annual only)</a></li>-->
+      <!--      <li><a href="" id="download_significance_report">Statistical Significance Report (annual only)</a></li>-->
     </ul>
     <div id="download_error" class="error" style="display: none; color: red; font-size: 1.2em; margin:1rem 0;"></div>
     <div class="center">

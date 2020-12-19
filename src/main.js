@@ -259,9 +259,9 @@ export default class ClimateByLocationWidget {
     height = Number.parseFloat(height) * 1.2;
     return Plotly.downloadImage(this.graphdiv, {
       format: 'png', width: width, height: height, filename: [
-        this.options.get_area_label.bind(this)(),
+        this.options.get_area_label.bind(this)().toLowerCase(),
         this.options.frequency,
-        this.options.variable,
+        this.get_variable_config(this.options.variable)['title'][this.options.unitsystem].toLowerCase().replace(/([^0-9a-z\s])/g, ''),
         "graph"
       ].join('-').replace(/[^A-Za-z0-9\-]/g, '_') + '.png'
     });
@@ -279,10 +279,10 @@ export default class ClimateByLocationWidget {
     }
     link.href = this.downloadable_dataurls.hist_obs;
     link.download = [
-      this.options.get_area_label.bind(this)(),
+      this.options.get_area_label.bind(this)().toLowerCase(),
       this.options.frequency,
       "hist_obs",
-      this.options.variable
+      this.get_variable_config(this.options.variable)['title'][this.options.unitsystem].toLowerCase().replace(/([^0-9a-z\s])/g, '')
     ].join('-').replace(/ /g, '_') + '.csv';
     return true;
   }
@@ -299,10 +299,10 @@ export default class ClimateByLocationWidget {
     }
     link.href = this.downloadable_dataurls.hist_mod;
     link.download = [
-      this.options.get_area_label.bind(this)(),
+      this.options.get_area_label.bind(this)().toLowerCase(),
       this.options.frequency,
       "hist_mod",
-      this.options.variable
+      this.get_variable_config(this.options.variable)['title'][this.options.unitsystem].toLowerCase().replace(/([^0-9a-z\s])/g, '')
     ].join('-').replace(/ /g, '_') + '.csv';
     return true;
   }
@@ -319,10 +319,10 @@ export default class ClimateByLocationWidget {
     }
     link.href = this.downloadable_dataurls.proj_mod;
     link.download = [
-      this.options.get_area_label.bind(this)(),
+      this.options.get_area_label.bind(this)().toLowerCase(),
       this.options.frequency,
       "proj_mod",
-      this.options.variable
+      this.get_variable_config(this.options.variable)['title'][this.options.unitsystem].toLowerCase().replace(/([^0-9a-z\s])/g, '')
     ].join('-').replace(/ /g, '_') + '.csv';
     return true;
   }
@@ -338,10 +338,10 @@ export default class ClimateByLocationWidget {
     }
     link.href = this.downloadable_dataurls.significance;
     link.download = [
-      this.options.get_area_label.bind(this)(),
+      this.options.get_area_label.bind(this)().toLowerCase(),
       this.options.frequency,
-      this.options.variable,
-      "significance"
+      this.get_variable_config(this.options.variable)['title'][this.options.unitsystem].toLowerCase().replace(/([^0-9a-z\s])/g, ''),
+      "statistical_significance"
     ].join('-').replace(/ /g, '_') + '.csv';
     return true;
   }
@@ -1595,7 +1595,7 @@ export default class ClimateByLocationWidget {
     let month_values = Object.fromEntries(ClimateByLocationWidget._months.map(m => [m, []]));
     if (!!area['area_bbox']) {
       ClimateByLocationWidget.flatten_and_mean(response.data).forEach(function (record) {
-        month_values[record[0].slice(-2)].push(unit_conversion_fn(parseFloat(record[1])));
+        month_values[record[0].slice(-2)].push([Number.parseInt(record[0].slice(0, 4)), unit_conversion_fn(parseFloat(record[1]))]);
       });
     } else {
       for (const [key, value] of response.data) {

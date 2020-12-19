@@ -28,7 +28,7 @@ jQuery(document).ready(function ($) {
         $('#other_areas').val('');
       } else if (area['area_type'] === 'ecoregion') {
         $('#ecoregion').val(area['area_id']);
-        $('#forest').val(area['forest'][0]);
+        $('#forest').val(area['forests'][0]);
         $('#other_areas').val('');
       } else if (area['area_type'] === 'island') {
         $('#other_areas').val(area['area_id']);
@@ -96,10 +96,14 @@ jQuery(document).ready(function ($) {
       if (frequency === "annual") {
         $('#timeperiod-wrapper').hide();
         $('#slider-range').show();
+        $('#download_significance_report-button').show()
+        $('label[for="histmod"]').show()
       }
       if (frequency === "monthly") {
         $('#timeperiod-wrapper').show();
         $('#slider-range').hide();
+        $('#download_significance_report-button').hide();
+        $('label[for="histmod"]').hide()
       }
     });
   }
