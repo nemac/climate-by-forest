@@ -410,7 +410,7 @@ export default class ClimateByLocationWidget {
         }
       }
 
-      this.downloadable_dataurls.significance = this._format_export_data(['area_id', 'variable', 'scenario', 'stat', 'hist_mean', 'proj_mean',  'change', 'CI', 'ftest','ttest_ev','ttest_uv','significance'], result)
+      this.downloadable_dataurls.significance = this._format_export_data(['area_id', 'variable', 'scenario', 'stat', 'hist_mean', 'proj_mean',  'change', 'CI', 'ftest','ttest_ev','ttest_uv','significance'], result, ['Statistical Significance Tests Technical Documentation:','https://climate-by-forest.nemac.org/docs/Climate%20By%20Forest%20Statistical%20Significance%20Documentation.pdf'])
     }
 
     this.downloadable_dataurls.hist_obs = this._format_export_data(['year', variable_config.id], hist_obs_data);
@@ -2000,11 +2000,11 @@ export default class ClimateByLocationWidget {
     }
   }
 
-  _format_export_data(column_labels, data) {
+  _format_export_data(column_labels, data, header=null) {
+    header = !!header? header.join(',') + Array(data[0].length - header.length + 1).map(()=>',') + '\n' : '';
     let export_data = data.map((row) => row.filter((cell) => cell !== null));
     export_data.unshift(column_labels);
-    return 'data:text/csv;base64,' + window.btoa(export_data.map((a) => a.join(', ')).join('\n'));
-
+    return 'data:text/csv;base64,' + window.btoa(header+export_data.map((a) => a.join(', ')).join('\n'));
   }
 
 
