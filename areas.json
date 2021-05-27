@@ -2221,22 +2221,6 @@
   },
   {
     "area_type": "ecoregion",
-    "area_id": "water",
-    "area_label": "Water",
-    "area_bbox": "-97.78518055363958,24.53068882942597,-66.79803824267071,49.0053529188022",
-    "forests": [
-      "chequamegon-nicolet_national_forest",
-      "francis_marion_and_sumter_national_forests",
-      "hiawatha_national_forest",
-      "huron-manistee_national_forest",
-      "national_forests_in_florida",
-      "national_forests_in_north_carolina",
-      "ottawa_national_forest",
-      "superior_national_forest"
-    ]
-  },
-  {
-    "area_type": "ecoregion",
     "area_id": "great_valley_of_virginia",
     "area_label": "Great Valley of Virginia",
     "area_bbox": "-83.30600283326413,35.828377445762555,-77.6883896446663,39.63817482700671",
