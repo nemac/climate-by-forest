@@ -1161,18 +1161,23 @@ export default class ClimateByLocationWidget {
     const col_offset = 1 + (ClimateByLocationWidget._monthly_timeperiods.indexOf(monthly_timeperiod) * 6)
     // for some reason unknown to me, the following month cycle is shown.
     const month_indexes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-
+    const tooltip_data = [];
     for (const m of month_indexes) {
       const _m = m % 12;
       chart_data['month'].push(m);
       chart_data['month_label'].push(ClimateByLocationWidget._months_labels[_m]);
       chart_data['hist_obs'].push(round(hist_obs_data[_m][1], precision));
       chart_data['rcp45_mean'].push(round(proj_mod_data[_m][col_offset], precision));
-      chart_data['rcp45_min'].push(round(proj_mod_data[_m][1 + col_offset], precision));
-      chart_data['rcp45_max'].push(round(proj_mod_data[_m][2 + col_offset], precision));
+      const rcp45_min = round(proj_mod_data[_m][1 + col_offset], precision)
+      const rcp45_max = round(proj_mod_data[_m][2 + col_offset], precision)
+      chart_data['rcp45_min'].push(rcp45_min);
+      chart_data['rcp45_max'].push(rcp45_max);
       chart_data['rcp85_mean'].push(round(proj_mod_data[_m][3 + col_offset], precision));
-      chart_data['rcp85_min'].push(round(proj_mod_data[_m][4 + col_offset], precision));
-      chart_data['rcp85_max'].push(round(proj_mod_data[_m][5 + col_offset], precision));
+      const rcp85_min = round(proj_mod_data[_m][4 + col_offset], precision);
+      const rcp85_max = round(proj_mod_data[_m][5 + col_offset], precision);
+      chart_data['rcp85_min'].push(rcp85_min);
+      chart_data['rcp85_max'].push(rcp85_max);
+      tooltip_data.push([_m, rcp45_min, rcp45_max, rcp85_min, rcp85_max])
     }
 
     const [x_range_min, x_range_max, y_range_min, y_range_max] = this._update_axes_ranges(
@@ -1209,8 +1214,8 @@ export default class ClimateByLocationWidget {
             line: {color: ClimateByLocationWidget._rgba(this.options.colors.rcp45.outerBand, this.options.colors.opacity.ann_proj_minmax), width: 0, opacity: this.options.colors.opacity.ann_proj_minmax},
             legendgroup: 'rcp45',
             visible: this.options.show_projected_rcp45 ? true : 'legendonly',
-            customdata: proj_mod_data,
-            hovertemplate: "(%{customdata[2]:.1f} - %{customdata[3]:.1f})<extra></extra>"
+            customdata: tooltip_data,
+            hovertemplate: "(%{customdata[1]:.1f} - %{customdata[2]:.1f})<extra></extra>"
           },
           {
             x: chart_data['month'],
@@ -1238,8 +1243,8 @@ export default class ClimateByLocationWidget {
             line: {color: ClimateByLocationWidget._rgba(this.options.colors.rcp85.outerBand, this.options.colors.opacity.ann_proj_minmax), width: 0, opacity: this.options.colors.opacity.ann_proj_minmax},
             legendgroup: 'rcp85',
             visible: this.options.show_projected_rcp85 ? true : 'legendonly',
-            customdata: proj_mod_data,
-            hovertemplate: "(%{customdata[5]:.1f} - %{customdata[6]:.1f})<extra></extra>"
+            customdata: tooltip_data,
+            hovertemplate: "(%{customdata[3]:.1f} - %{customdata[4]:.1f})<extra></extra>"
           },
           {
             x: chart_data['month'],
