@@ -97,3 +97,7 @@ cwg.update({
 
 For a more complete example, see the files `demo.html` and `demo.js` in this
 directory.
+
+## Deployment
+
+Deployment of this project is done via Github Actions. To deploy, make the necessary changes and push to the `production` branch which will trigger the github actions to sync S3 with the latest changes.
