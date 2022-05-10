@@ -101,3 +101,5 @@ directory.
 ## Deployment
 
 Deployment of this project is done via Github Actions. To deploy, make the necessary changes and push to the `production` branch which will trigger the github actions to sync S3 with the latest changes.
+
+This deployment process does not invalidate CloudFront cache's, so if changes are not showing right away you may need to invalidate them manually.
